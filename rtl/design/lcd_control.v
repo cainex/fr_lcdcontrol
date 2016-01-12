@@ -70,9 +70,7 @@ module lcd_control
   // Beginning of automatic regs (for this module's undeclared outputs)
   reg			lcd_e;
   reg			lcd_rs;
-  wire			lcd_rw;
   reg [7:0]		led;
-  wire			sf_ceo;
   reg [3:0]		sf_d;
   // End of automatics
   /*AUTOWIRE*/
@@ -303,7 +301,8 @@ module lcd_control
 
   ////////////////////////
   // TX state machine
-  always @(/*AS*/timer_expired or tx_count or tx_init or tx_state) begin
+  always @(/*AS*/led or timer_expired or tx_count or tx_init
+	   or tx_state) begin
     nxt_tx_state = tx_state;
     lcd_e0 = 1'b0;
     sf_d0 = led[3:0];
@@ -378,7 +377,7 @@ module lcd_control
 
   ////////////////////////
   // Init state machine
-  always @(/*AS*/) begin
+  always @(/*AS*/init_init or init_state) begin
     nxt_init_state = init_state;
 
     case (init_state)
